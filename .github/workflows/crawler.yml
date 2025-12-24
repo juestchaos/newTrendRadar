@@ -162,25 +162,9 @@ jobs:
           GITHUB_ACTIONS: true
         run: python -m trendradar
 
-      # 核心：上传 output 目录为 artifact
-      - name: 上传生成的文件
-        uses: actions/upload-artifact@v4
-        with:
-          name: trendradar-files  # 产物名称，可自定义
-          path: |  # 指定要上传的文件/目录
-            output/
-            # 整个 output 目录（包含所有生成的文件）
-            # 若只需特定文件，可精准指定：
-            # output/2025-12-24/html/*.html
-            # output/2025-12-24/news.db
-
- # 关键：打印工作目录 + 查找生成的文件
-      - name: 排查文件路径
+      - name: Commit and push if changes
         run: |
-          echo "当前工作目录：$(pwd)"
-          echo "列出当前目录所有文件："
-          ls -la
-          echo "查找所有 .html 文件："
-          find . -name "*.html"  # 全局查找生成的 HTML 文件
-          echo "查找 news.db 文件："
-          find . -name "news.db"
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update by GitHub Actions at $(TZ=Asia/Shanghai date)" && git push)
