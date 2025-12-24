@@ -161,3 +161,14 @@ jobs:
           S3_REGION: ${{ secrets.S3_REGION }}
           GITHUB_ACTIONS: true
         run: python -m trendradar
+
+ # 关键：打印工作目录 + 查找生成的文件
+      - name: 排查文件路径
+        run: |
+          echo "当前工作目录：$(pwd)"
+          echo "列出当前目录所有文件："
+          ls -la
+          echo "查找所有 .html 文件："
+          find . -name "*.html"  # 全局查找生成的 HTML 文件
+          echo "查找 news.db 文件："
+          find . -name "news.db"
